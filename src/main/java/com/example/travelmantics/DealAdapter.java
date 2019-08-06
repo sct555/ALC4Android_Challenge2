@@ -1,10 +1,7 @@
 package com.example.travelmantics;
 
-import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,17 +30,14 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
     private ImageView imageDeal;
 
     public DealAdapter() {
-        //FirebaseUtil.openFbReference("traveldeals");
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
         deals = FirebaseUtil.mDeals;
 
         mChildListener = new ChildEventListener() {
-
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
-                //Log.d("Deal: ", td.getTitle());
                 td.setId(dataSnapshot.getKey());
                 deals.add(td);
                 notifyItemInserted(deals.size()-1);

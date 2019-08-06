@@ -27,8 +27,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
-
 public class DealActivity extends AppCompatActivity {
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -46,10 +44,8 @@ public class DealActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("CustomMessage", "DealActivity onCreate");
         setContentView(R.layout.activity_deal);
 
-        //FirebaseUtil.openFbReference("traveldeals", this);
         mFirebaseDatabase = FirebaseUtil.mFirebaseDatabase;
         mDatabaseReference = FirebaseUtil.mDatabaseReference;
 
@@ -76,8 +72,6 @@ public class DealActivity extends AppCompatActivity {
         btnImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("CustomMessage", "btnImage.setOnClickListener triggered");
-                //Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 Intent intent = new Intent();
                 intent.setAction((Intent.ACTION_GET_CONTENT));
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
@@ -85,13 +79,11 @@ public class DealActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent,"Insert Picture"), PICTURE_RESULT);
             }
         });
-
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         setContentView(R.layout.activity_list);
-        Log.d("CustomMessage", "DealActivity onOptionsItemSelected");
 
         //View parentLayout = findViewById(android.R.id.content); //snackBar attempt
         switch (item.getItemId()) {
@@ -119,7 +111,6 @@ public class DealActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("CustomMessage", "DealActivity onCreateOptionsMenu");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
         if (FirebaseUtil.isAdmin) {
@@ -143,7 +134,7 @@ public class DealActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("CustomMessage", "DealActivity onActivityResult");
+
         if(requestCode == PICTURE_RESULT && resultCode == RESULT_OK) {
             Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_LONG).show();
             Uri imageUri = data.getData();
@@ -165,15 +156,10 @@ public class DealActivity extends AppCompatActivity {
                             Log.d("CustomMessage", "Image Name: " + pictureName);
                             showImage(url);
 
-                            //setContentView(R.layout.activity_deal);
-                            //Toast.makeText(DealActivity.getBaseContext(), "Image uploaded", Toast.LENGTH_LONG).show();
                             Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_LONG).show();
                         }
 
                     });
-
-                    //String url = taskSnapshot.getUploadSessionUri().toString();
-                    //deal.setImageUrl(url);
                 }
             });
         }
@@ -191,7 +177,6 @@ public class DealActivity extends AppCompatActivity {
     }
 
     private void deleteDeal() {
-        Log.d("CustomMessage", "DealActivity deleteDeal()");
         if (deal == null) {
             Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show();
             return;
@@ -212,14 +197,12 @@ public class DealActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d("CustomMessage", "DealActivity deleteDeal() onFailure - Image deletion unsuccessful: Error: " + e.getMessage());
-
                 }
             });
         }
     }
 
     private void backToList() {
-        Log.d("CustomMessage", "DealActivity backToList()");
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
     }
@@ -252,7 +235,6 @@ public class DealActivity extends AppCompatActivity {
     }
 
     private void showImage(String url) {
-        Log.d("CustomMessage", "DealActivity showImage()");
         if (url != null && url.isEmpty() == false) {
             int width = Resources.getSystem().getDisplayMetrics().widthPixels;
             Picasso.get()
@@ -262,6 +244,4 @@ public class DealActivity extends AppCompatActivity {
                     .into(imageView);
         }
     }
-
-
 }

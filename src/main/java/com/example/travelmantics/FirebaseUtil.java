@@ -1,9 +1,6 @@
 package com.example.travelmantics;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +19,6 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class FirebaseUtil {
     public static FirebaseDatabase mFirebaseDatabase;
