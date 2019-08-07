@@ -2,6 +2,7 @@ package com.example.travelmantics;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +18,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
@@ -38,6 +42,7 @@ public class DealActivity extends AppCompatActivity {
     EditText textCurrency;
     TravelDeal deal;
     ImageView imageView;
+    CoordinatorLayout coordinatorLayout;
 
     //String snackbarMessage;
 
@@ -126,7 +131,7 @@ public class DealActivity extends AppCompatActivity {
             enableEditTexts(false);
         }
 //***
-        invalidateOptionsMenu();
+//        invalidateOptionsMenu();
 //***
         return true;
     }
@@ -137,6 +142,8 @@ public class DealActivity extends AppCompatActivity {
 
         if(requestCode == PICTURE_RESULT && resultCode == RESULT_OK) {
             Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_LONG).show();
+
+
             Uri imageUri = data.getData();
             StorageReference ref = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
 
@@ -157,6 +164,7 @@ public class DealActivity extends AppCompatActivity {
                             showImage(url);
 
                             Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_LONG).show();
+
                         }
 
                     });
@@ -231,7 +239,12 @@ public class DealActivity extends AppCompatActivity {
 
         Button btnImage = (findViewById(R.id.btnImage));
         btnImage.setEnabled(isEnabled);
-
+        if(isEnabled) {
+            btnImage.setVisibility(View.VISIBLE);
+        }
+        else {
+            btnImage.setVisibility(View.GONE);
+        }
     }
 
     private void showImage(String url) {

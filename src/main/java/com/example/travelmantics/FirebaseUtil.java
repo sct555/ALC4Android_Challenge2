@@ -63,19 +63,17 @@ public class FirebaseUtil {
                         userUid = mFirebaseUser.getUid();
                     }
 
-                    //Log.d("CustomMessage","FirebaseUtil.openFbReference - userEmail: " + userEmail);
                     Log.d("CustomMessage","FirebaseUtil.openFbReference - userDisplayName: " + userDisplayName);
-                    //Log.d("CustomMessage","FirebaseUtil.openFbReference - userUid: " + userUid);
 //****
 
-//                    Toast.makeText(callerActivity.getBaseContext(), "Welcome back!", Toast.LENGTH_LONG).show();
+
                 }
             };
             connectStorage();
         }
         mDeals = new ArrayList<TravelDeal>();
         mDatabaseReference = mFirebaseDatabase.getReference().child(ref);
-//        Toast.makeText(callerActivity.getBaseContext(), "openFbReference() : Current user is: " + FirebaseUtil.userDisplayName, Toast.LENGTH_LONG).show();
+
     }
 
     private static void signIn() {

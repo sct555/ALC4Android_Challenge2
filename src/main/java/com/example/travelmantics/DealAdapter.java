@@ -1,12 +1,16 @@
 package com.example.travelmantics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +21,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder> {
 
@@ -35,12 +42,17 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         deals = FirebaseUtil.mDeals;
 
         mChildListener = new ChildEventListener() {
+            @SuppressLint("RestrictedApi")                                                          //added
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+//                Toast.makeText(getApplicationContext(), "DealAdapter.onChildAdded start", Toast.LENGTH_LONG).show();
+
                 TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
                 td.setId(dataSnapshot.getKey());
                 deals.add(td);
                 notifyItemInserted(deals.size()-1);
+//                Toast.makeText(getApplicationContext(), "DealAdapter.onChildAdded end", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -99,6 +111,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             itemView.setOnClickListener(this);
         }
 
+        @SuppressLint("RestrictedApi")                                                          //added
         public void bind(TravelDeal deal) {
             tvTitle.setText(deal.getTitle());
             tvDescription.setText(deal.getDescription());
@@ -116,15 +129,20 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             view.getContext().startActivity(intent);
         }
 
+        @SuppressLint("RestrictedApi")                                                          //added
         private void showImage(String url) {
+
+            Log.d("CustomMessage", "showImage() start" );
+
             if (url != null && url.isEmpty()==false) {
                 Picasso.get()
                         .load(url)
-                        .resize(160, 160)
+                        .resize(210, 210)
                         .centerCrop()
+                        .placeholder(R.mipmap.travelmantics_icon)
                         .into(imageDeal);
-
             }
+            Log.d("CustomMessage", "showImage() end" );
         }
     }
 }

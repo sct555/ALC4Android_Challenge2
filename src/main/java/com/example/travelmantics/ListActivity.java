@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -23,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -36,10 +41,13 @@ public class ListActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildListener;
 
+    ProgressBar myProgressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
     }
 
     @Override
@@ -58,8 +66,27 @@ public class ListActivity extends AppCompatActivity {
             insertMenu.setVisible(false);
         }
 */
+//        Toast.makeText(this, "Welcome " + FirebaseUtil.userDisplayName + "!", Toast.LENGTH_LONG).show();
 
-        Toast.makeText(this, "Welcome " + FirebaseUtil.userDisplayName + "!", Toast.LENGTH_LONG).show();
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(5000);
+        mySnackbar.show();
+
+/*
+        TextView myTextView = (TextView) mySnackbarView.findViewById(R.id.snackbar_text);
+        mySnackbar.setActionTextColor(Color.GREEN);
+        myTextView.setTextColor(Color.BLUE);
+        mySnackbar.show();
+*/
+
+//        mySnackbar.getView(parentLayout);
+//        mySnackbar.show();
+//        mySnackbar.getView(Color.parseColor("#1565c0"));
+
+
+
+        //        Snackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).show();
+
         return true;
     }
 
@@ -102,19 +129,22 @@ public class ListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
         FirebaseUtil.detachListener();
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
 
-/*  Snackbar attemp
+//        ProgressBar myProgressBar;
+//        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+//        myProgressBar.setVisibility(View.VISIBLE);
+
+
+/*  Snackbar attempt for delete deal
         // Get the transferred data from source activity.
         View parentLayout = findViewById(android.R.id.content);
 
@@ -135,6 +165,8 @@ public class ListActivity extends AppCompatActivity {
         LinearLayoutManager dealsLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.attachListener();
+
+
     }
 
     public void showMenu() {
