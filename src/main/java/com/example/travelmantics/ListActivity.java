@@ -30,16 +30,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.travelmantics.FirebaseUtil.mFirebaseAuth;
 
 public class ListActivity extends AppCompatActivity {
-    //String snackbarMessage;
 
     ArrayList<TravelDeal> deals;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildListener;
+    private static String snackbarMessage;
 
     ProgressBar myProgressBar;
 
@@ -68,9 +69,13 @@ public class ListActivity extends AppCompatActivity {
 */
 //        Toast.makeText(this, "Welcome " + FirebaseUtil.userDisplayName + "!", Toast.LENGTH_LONG).show();
 
+
+/*
+        //snackbar for user welcome
         View parentLayout = findViewById(android.R.id.content);
-        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(5000);
+        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(4000);
         mySnackbar.show();
+*/
 
 /*
         TextView myTextView = (TextView) mySnackbarView.findViewById(R.id.snackbar_text);
@@ -139,23 +144,39 @@ public class ListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+
 //        ProgressBar myProgressBar;
 //        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 //        myProgressBar.setVisibility(View.VISIBLE);
 
-
-/*  Snackbar attempt for delete deal
-        // Get the transferred data from source activity.
+/*
         View parentLayout = findViewById(android.R.id.content);
+        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, ListActivity.snackbarMessage, Snackbar.LENGTH_LONG).setDuration(4000);
+        mySnackbar.show();
+        ListActivity.snackbarMessage = "";
+
+*/
+
+
+        //Snackbar attempt for delete deal
+        //Get the transferred data from source activity.
 
         Intent intent = getIntent();
         snackbarMessage = intent.getStringExtra("snackbarMessage");
-        if (snackbarMessage != null) {
+        if (snackbarMessage != null && snackbarMessage != "") {
             //Toast.makeText(this,"snackBar: " + snackbarMessage, Toast.LENGTH_LONG).show();
-            Snackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).show();
+
+            View parentLayout = (View) findViewById(android.R.id.content);
+
+            Log.d("CustomMessage", "snackbarMessage before show() is: " + snackbarMessage);
+            Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).setDuration(4000);
+            mySnackbar.show();
+
+//            DealActivity.snackbarMessage = null;
             snackbarMessage = null;
+            Log.d("CustomMessage", "snackbarMessage at end of if() is: " + snackbarMessage);
         }
-*/
+
 
         FirebaseUtil.openFbReference("traveldeals", this);
         RecyclerView rvDeals = (RecyclerView) findViewById(R.id.rv_deals);
@@ -166,7 +187,11 @@ public class ListActivity extends AppCompatActivity {
         rvDeals.setLayoutManager(dealsLayoutManager);
         FirebaseUtil.attachListener();
 
+    }
 
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
     public void showMenu() {

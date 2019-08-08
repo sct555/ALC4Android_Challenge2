@@ -42,17 +42,12 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
         deals = FirebaseUtil.mDeals;
 
         mChildListener = new ChildEventListener() {
-            @SuppressLint("RestrictedApi")                                                          //added
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-//                Toast.makeText(getApplicationContext(), "DealAdapter.onChildAdded start", Toast.LENGTH_LONG).show();
-
                 TravelDeal td = dataSnapshot.getValue(TravelDeal.class);
                 td.setId(dataSnapshot.getKey());
                 deals.add(td);
                 notifyItemInserted(deals.size()-1);
-//                Toast.makeText(getApplicationContext(), "DealAdapter.onChildAdded end", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -111,7 +106,7 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             itemView.setOnClickListener(this);
         }
 
-        @SuppressLint("RestrictedApi")                                                          //added
+
         public void bind(TravelDeal deal) {
             tvTitle.setText(deal.getTitle());
             tvDescription.setText(deal.getDescription());
@@ -129,10 +124,8 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
             view.getContext().startActivity(intent);
         }
 
-        @SuppressLint("RestrictedApi")                                                          //added
-        private void showImage(String url) {
 
-            Log.d("CustomMessage", "showImage() start" );
+        private void showImage(String url) {
 
             if (url != null && url.isEmpty()==false) {
                 Picasso.get()
@@ -142,7 +135,6 @@ public class DealAdapter extends RecyclerView.Adapter<DealAdapter.DealViewHolder
                         .placeholder(R.mipmap.travelmantics_icon)
                         .into(imageDeal);
             }
-            Log.d("CustomMessage", "showImage() end" );
         }
     }
 }

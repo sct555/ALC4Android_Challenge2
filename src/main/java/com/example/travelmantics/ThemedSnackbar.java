@@ -1,22 +1,17 @@
 package com.example.travelmantics;
 
 import android.content.Context;
-//import android.support.design.widget.Snackbar;
 import com.google.android.material.snackbar.Snackbar;
 import android.util.TypedValue;
 import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
 
 
-/**
- * Created by jakubkinst on 25/06/15.
- */
 public class ThemedSnackbar extends AppCompatActivity {
 
-    public static boolean snackbarTriggered = false;
+    //public static boolean snackbarTriggered = false;
 
     public static Snackbar make(View view, CharSequence text, int duration) {
 

@@ -2,6 +2,7 @@ package com.example.travelmantics;
 
 import android.util.Log;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -88,6 +89,8 @@ public class FirebaseUtil {
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
+//                        .setLogo(R.mipmap.travelmantics_icon)                       //*************** didn't exist
+                        .setLogo(R.drawable.foreground_original)
                         .setIsSmartLockEnabled(true)                                               //*************** didn't exist
                         .build(),
                 RC_SIGN_IN);

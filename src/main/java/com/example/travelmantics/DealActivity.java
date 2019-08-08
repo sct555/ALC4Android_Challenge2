@@ -1,5 +1,7 @@
 package com.example.travelmantics;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,15 +39,15 @@ public class DealActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     public static final int PICTURE_RESULT = 42;
+    private static String snackbarMessage;
+
     EditText txtTitle;
     EditText txtDescription;
     EditText txtPrice;
     EditText textCurrency;
     TravelDeal deal;
     ImageView imageView;
-    CoordinatorLayout coordinatorLayout;
 
-    //String snackbarMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,23 +93,37 @@ public class DealActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         setContentView(R.layout.activity_list);
 
-        //View parentLayout = findViewById(android.R.id.content); //snackBar attempt
+        View parentLayout = findViewById(android.R.id.content); //snackBar attempt
+
         switch (item.getItemId()) {
             case R.id.save_menu:
                 saveDeal();
-                Toast.makeText(this,"Deal saved", Toast.LENGTH_LONG).show();
-                //snackbarMessage = "Deal saved"; //snackBar attempt
+
+//              Toast.makeText(this,"Deal saved", Toast.LENGTH_LONG).show();
+//              ListActivity.snackbarMessage = "Deal saved";
+//**                snackbarMessage = "Deal saved"; //snackBar attempt
+//              Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Deal saved", Snackbar.LENGTH_LONG).setDuration(4000);
+//              mySnackbar.show();
+
                 clean();
-                //backToList(snackbarMessage); //snackBar attempt
-                backToList();
+
+                backToList(snackbarMessage); //snackBar attempt
+//              backToList();
                 return true;
 
             case R.id.delete_menu:
                 deleteDeal();
-                Toast.makeText(this,"Deal deleted", Toast.LENGTH_LONG).show();
-                //snackbarMessage = "Deal deleted"; //snackBar attempt
-                //backToList(snackbarMessage); //snackBar attempt
-                backToList();
+                Log.d("CustomMessage", "snackbarMessage after deleteDeal() call: " + snackbarMessage);
+
+//              Toast.makeText(this,"Deal deleted", Toast.LENGTH_LONG).show();
+//              ListActivity.snackbarMessage = "Deal deleted";
+
+//                snackbarMessage = "Deal deleted"; //snackBar attempt
+//              mySnackbar = ThemedSnackbar.make(parentLayout, "Deal deleted", Snackbar.LENGTH_LONG).setDuration(4000);
+//              mySnackbar.show();
+                Log.d("CustomMessage", "snackbarMessage before backToList() is: " + snackbarMessage);
+                backToList(snackbarMessage); //snackBar attempt
+//              backToList();
                 return true;
 
             default:
@@ -119,20 +136,16 @@ public class DealActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.save_menu, menu);
         if (FirebaseUtil.isAdmin) {
-//            menu.findItem(R.id.insert_menu).setVisible(true);                                       // added, wasn't included
             menu.findItem(R.id.delete_menu).setVisible(true);
             menu.findItem(R.id.save_menu).setVisible(true);
             enableEditTexts(true);
         }
         else {
-//            menu.findItem(R.id.insert_menu).setVisible(false);                                       // added, wasn't included
             menu.findItem(R.id.delete_menu).setVisible(false);
             menu.findItem(R.id.save_menu).setVisible(false);
             enableEditTexts(false);
         }
-//***
-//        invalidateOptionsMenu();
-//***
+
         return true;
     }
 
@@ -141,8 +154,11 @@ public class DealActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == PICTURE_RESULT && resultCode == RESULT_OK) {
-            Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_LONG).show();
+//          Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_LONG).show();
 
+            View parentLayout = findViewById(android.R.id.content);
+            final Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Uploading image...", Snackbar.LENGTH_INDEFINITE);
+            mySnackbar.show();
 
             Uri imageUri = data.getData();
             StorageReference ref = FirebaseUtil.mStorageRef.child(imageUri.getLastPathSegment());
@@ -163,13 +179,31 @@ public class DealActivity extends AppCompatActivity {
                             Log.d("CustomMessage", "Image Name: " + pictureName);
                             showImage(url);
 
-                            Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_LONG).show();
+                            mySnackbar.dismiss();
 
+                            View parentLayout = findViewById(android.R.id.content);
+                            Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Upload complete", Snackbar.LENGTH_LONG).setDuration(4000);
+                            mySnackbar.show();
                         }
 
                     });
                 }
             });
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(FirebaseUtil.isAdmin) {
+            snackbarMessage = "Changes discarded";
+            clean();
+            backToList(snackbarMessage);
+            super.finish();
+        }
+        else {
+            snackbarMessage = "";
+            backToList(snackbarMessage);
+            super.finish();
         }
     }
 
@@ -179,19 +213,27 @@ public class DealActivity extends AppCompatActivity {
         deal.setPrice(txtPrice.getText().toString());
         if (deal.getId() == null) {
             mDatabaseReference.push().setValue(deal);
+            snackbarMessage = "Deal saved";
         } else {
             mDatabaseReference.child(deal.getId()).setValue(deal);
+            snackbarMessage = "";
         }
     }
 
+
+        //Original deleteDeal()
     private void deleteDeal() {
+        Log.d("CustomMessage","deleteDeal()");
+        Log.d("CustomMessage","deal.getId() is: " + deal.getId());
+
         if (deal == null) {
+            Log.d("CustomMessage","deleteDeal() - if(deal==null)");
             Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show();
+            snackbarMessage = "Please save the deal before deleting it";
             return;
         }
+
         mDatabaseReference.child(deal.getId()).removeValue();
-        Toast.makeText(this,"Deal data deleted", Toast.LENGTH_LONG).show();
-        Log.d("CustomMessage", "DealActivity deleteDeal() - Deal data deleted");
 
         if(deal.getImageName() !=null && deal.getImageName().isEmpty() == false) {
             StorageReference picref = FirebaseUtil.mStorage.getReference().child(deal.getImageName());
@@ -207,22 +249,27 @@ public class DealActivity extends AppCompatActivity {
                     Log.d("CustomMessage", "DealActivity deleteDeal() onFailure - Image deletion unsuccessful: Error: " + e.getMessage());
                 }
             });
+            snackbarMessage = "Deal deleted";
         }
     }
 
+
+
+
+/*
+  //original backToList
     private void backToList() {
         Intent intent = new Intent(this, ListActivity.class);
         startActivity(intent);
     }
+*/
 
-/*  //snackBar attempt
+  //snackBar backToList
     private void backToList(String snackbarMessage) {
         Intent intent = new Intent(this, ListActivity.class);
         intent.putExtra("snackbarMessage",snackbarMessage);
-
         startActivity(intent);
     }
-*/
 
     private void clean() {
         txtTitle.setText("");
