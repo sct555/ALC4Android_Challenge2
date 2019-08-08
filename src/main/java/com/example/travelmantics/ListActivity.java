@@ -58,39 +58,12 @@ public class ListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.list_activity_menu, menu);
         MenuItem insertMenu = menu.findItem(R.id.insert_menu);
 
-//  Original location of admin check code - moved to onPrepareOptionsMenu
-/*
-        if (FirebaseUtil.isAdmin == true) {
-            insertMenu.setVisible(true);
-        }
-        else {
-            insertMenu.setVisible(false);
-        }
-*/
-//        Toast.makeText(this, "Welcome " + FirebaseUtil.userDisplayName + "!", Toast.LENGTH_LONG).show();
-
-
 /*
         //snackbar for user welcome
         View parentLayout = findViewById(android.R.id.content);
         Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(4000);
         mySnackbar.show();
 */
-
-/*
-        TextView myTextView = (TextView) mySnackbarView.findViewById(R.id.snackbar_text);
-        mySnackbar.setActionTextColor(Color.GREEN);
-        myTextView.setTextColor(Color.BLUE);
-        mySnackbar.show();
-*/
-
-//        mySnackbar.getView(parentLayout);
-//        mySnackbar.show();
-//        mySnackbar.getView(Color.parseColor("#1565c0"));
-
-
-
-        //        Snackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).show();
 
         return true;
     }
@@ -149,15 +122,6 @@ public class ListActivity extends AppCompatActivity {
 //        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 //        myProgressBar.setVisibility(View.VISIBLE);
 
-/*
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, ListActivity.snackbarMessage, Snackbar.LENGTH_LONG).setDuration(4000);
-        mySnackbar.show();
-        ListActivity.snackbarMessage = "";
-
-*/
-
-
         //Snackbar attempt for delete deal
         //Get the transferred data from source activity.
 
@@ -166,15 +130,16 @@ public class ListActivity extends AppCompatActivity {
         if (snackbarMessage != null && snackbarMessage != "") {
             //Toast.makeText(this,"snackBar: " + snackbarMessage, Toast.LENGTH_LONG).show();
 
-            View parentLayout = (View) findViewById(android.R.id.content);
+//            View parentLayout = (View) findViewById(android.R.id.content);
 
             Log.d("CustomMessage", "snackbarMessage before show() is: " + snackbarMessage);
+
+            View parentLayout = (View) findViewById(android.R.id.content);
             Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).setDuration(4000);
             mySnackbar.show();
 
-//            DealActivity.snackbarMessage = null;
+
             snackbarMessage = null;
-            Log.d("CustomMessage", "snackbarMessage at end of if() is: " + snackbarMessage);
         }
 
 

@@ -203,9 +203,8 @@ public class DealActivity extends AppCompatActivity {
         //Original deleteDeal()
     private void deleteDeal() {
 
-        if (deal == null) {
-            Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show();
-//            snackbarMessage = "Please save the deal before deleting it";
+        if (deal.getId() == null) {
+            snackbarMessage = "Please save a deal before deleting it";
             return;
         }
 

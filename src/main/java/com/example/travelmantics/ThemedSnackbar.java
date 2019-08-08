@@ -6,8 +6,6 @@ import android.util.TypedValue;
 import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.concurrent.TimeUnit;
-
 
 public class ThemedSnackbar extends AppCompatActivity {
 

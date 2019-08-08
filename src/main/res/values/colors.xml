@@ -13,6 +13,8 @@
     <color name="colorAccent">#5e92f3</color>
 
     <color name="text_darkGrey">#727273</color>
+    <color name="colorError">#fff44336</color>
+
 
     <!-- Hand picked secondary colours -->
     <!--
