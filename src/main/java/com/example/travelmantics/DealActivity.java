@@ -98,32 +98,13 @@ public class DealActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.save_menu:
                 saveDeal();
-
-//              Toast.makeText(this,"Deal saved", Toast.LENGTH_LONG).show();
-//              ListActivity.snackbarMessage = "Deal saved";
-//**                snackbarMessage = "Deal saved"; //snackBar attempt
-//              Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Deal saved", Snackbar.LENGTH_LONG).setDuration(4000);
-//              mySnackbar.show();
-
                 clean();
-
-                backToList(snackbarMessage); //snackBar attempt
-//              backToList();
+                backToList(snackbarMessage); //snackBar
                 return true;
 
             case R.id.delete_menu:
                 deleteDeal();
-                Log.d("CustomMessage", "snackbarMessage after deleteDeal() call: " + snackbarMessage);
-
-//              Toast.makeText(this,"Deal deleted", Toast.LENGTH_LONG).show();
-//              ListActivity.snackbarMessage = "Deal deleted";
-
-//                snackbarMessage = "Deal deleted"; //snackBar attempt
-//              mySnackbar = ThemedSnackbar.make(parentLayout, "Deal deleted", Snackbar.LENGTH_LONG).setDuration(4000);
-//              mySnackbar.show();
-                Log.d("CustomMessage", "snackbarMessage before backToList() is: " + snackbarMessage);
                 backToList(snackbarMessage); //snackBar attempt
-//              backToList();
                 return true;
 
             default:
@@ -154,8 +135,6 @@ public class DealActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == PICTURE_RESULT && resultCode == RESULT_OK) {
-//          Toast.makeText(getApplicationContext(), "Uploading image...", Toast.LENGTH_LONG).show();
-
             View parentLayout = findViewById(android.R.id.content);
             final Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Uploading image...", Snackbar.LENGTH_INDEFINITE);
             mySnackbar.show();
@@ -223,13 +202,10 @@ public class DealActivity extends AppCompatActivity {
 
         //Original deleteDeal()
     private void deleteDeal() {
-        Log.d("CustomMessage","deleteDeal()");
-        Log.d("CustomMessage","deal.getId() is: " + deal.getId());
 
         if (deal == null) {
-            Log.d("CustomMessage","deleteDeal() - if(deal==null)");
             Toast.makeText(this, "Please save the deal before deleting", Toast.LENGTH_LONG).show();
-            snackbarMessage = "Please save the deal before deleting it";
+//            snackbarMessage = "Please save the deal before deleting it";
             return;
         }
 
@@ -253,16 +229,6 @@ public class DealActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-/*
-  //original backToList
-    private void backToList() {
-        Intent intent = new Intent(this, ListActivity.class);
-        startActivity(intent);
-    }
-*/
 
   //snackBar backToList
     private void backToList(String snackbarMessage) {
