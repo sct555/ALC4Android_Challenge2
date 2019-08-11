@@ -40,6 +40,8 @@ public class FirebaseUtil {
     public static String userUid;
 
     public static void openFbReference(String ref, final ListActivity callerActivity) {
+        Log.d("CustomMessage","openFbReference()");
+
         if(firebaseUtil == null) {
             firebaseUtil = new FirebaseUtil();
             mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -51,10 +53,18 @@ public class FirebaseUtil {
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     if (firebaseAuth.getCurrentUser() == null){
                         FirebaseUtil.signIn();
+                        ListActivity.snackbarMessage = "";
+                        Log.d("CustomMessage","ListActivity.snackbarMessage set to empty if()");
+                        DealActivity.snackbarMessage = "";
+                        Log.d("CustomMessage","DealActivity.snackbarMessage set to empty if()");
                     }
                     else {
                         String userId = firebaseAuth.getUid();
                         checkAdmin(userId);
+                        ListActivity.snackbarMessage = "";
+                        Log.d("CustomMessage","ListActivity.snackbarMessage set to empty else()");
+                        DealActivity.snackbarMessage = "";
+                        Log.d("CustomMessage","DealActivity.snackbarMessage set to empty else()");
                     }
 //****
                     mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

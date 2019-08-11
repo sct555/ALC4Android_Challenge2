@@ -39,7 +39,7 @@ public class DealActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     public static final int PICTURE_RESULT = 42;
-    private static String snackbarMessage;
+    public static String snackbarMessage = "";
 
     EditText txtTitle;
     EditText txtDescription;
@@ -99,12 +99,14 @@ public class DealActivity extends AppCompatActivity {
             case R.id.save_menu:
                 saveDeal();
                 clean();
-                backToList(snackbarMessage); //snackBar
+//                backToList(snackbarMessage); //snackBar
+                backToList();
                 return true;
 
             case R.id.delete_menu:
                 deleteDeal();
-                backToList(snackbarMessage); //snackBar attempt
+//                backToList(snackbarMessage); //snackBar attempt
+                backToList();
                 return true;
 
             default:
@@ -174,28 +176,31 @@ public class DealActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(FirebaseUtil.isAdmin) {
-            snackbarMessage = "Changes discarded";
+            DealActivity.snackbarMessage = "Changes discarded";
             clean();
-            backToList(snackbarMessage);
+//            backToList(snackbarMessage);
+            backToList();
             super.finish();
         }
         else {
-            snackbarMessage = "";
-            backToList(snackbarMessage);
+            DealActivity.snackbarMessage = "";
+//            backToList(snackbarMessage);
+            backToList();
             super.finish();
         }
     }
 
     private void saveDeal() {
+
         deal.setTitle(txtTitle.getText().toString());
         deal.setDescription(txtDescription.getText().toString());
         deal.setPrice(txtPrice.getText().toString());
         if (deal.getId() == null) {
             mDatabaseReference.push().setValue(deal);
-            snackbarMessage = "Deal saved";
+            DealActivity.snackbarMessage = "Deal saved";
         } else {
             mDatabaseReference.child(deal.getId()).setValue(deal);
-            snackbarMessage = "";
+            DealActivity.snackbarMessage = "";
         }
     }
 
@@ -230,9 +235,9 @@ public class DealActivity extends AppCompatActivity {
 
 
   //snackBar backToList
-    private void backToList(String snackbarMessage) {
+    private void backToList() {
         Intent intent = new Intent(this, ListActivity.class);
-        intent.putExtra("snackbarMessage",snackbarMessage);
+        intent.putExtra("snackbarMessage",DealActivity.snackbarMessage);
         startActivity(intent);
     }
 

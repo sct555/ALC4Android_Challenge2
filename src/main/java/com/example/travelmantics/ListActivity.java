@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.stats.LoggingConstants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -40,7 +41,8 @@ public class ListActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private ChildEventListener mChildListener;
-    private static String snackbarMessage;
+    public static String snackbarMessage = "TEST";
+    public static boolean firstUseFlag = true;
 
     ProgressBar myProgressBar;
 
@@ -49,6 +51,8 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        Log.d("CustomMessage","onCreate();");
+        Log.d("CustomMessage", "snackbarMessage is: " + snackbarMessage);
     }
 
     @Override
@@ -58,12 +62,16 @@ public class ListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.list_activity_menu, menu);
         MenuItem insertMenu = menu.findItem(R.id.insert_menu);
 
-/*
+
         //snackbar for user welcome
-        View parentLayout = findViewById(android.R.id.content);
-        Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(4000);
-        mySnackbar.show();
-*/
+        if(firstUseFlag == true) {
+            firstUseFlag = false;
+            View parentLayout = findViewById(android.R.id.content);
+            Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, "Welcome " + FirebaseUtil.userDisplayName + "!", Snackbar.LENGTH_LONG).setDuration(4000);
+            mySnackbar.show();
+            snackbarMessage = "";
+
+        }
 
         return true;
     }
@@ -78,7 +86,6 @@ public class ListActivity extends AppCompatActivity {
         else {
             insertMenu.setVisible(false);
         }
-
         return true;
     }
 
@@ -101,7 +108,8 @@ public class ListActivity extends AppCompatActivity {
                         });
 
                 FirebaseUtil.detachListener();
-
+                snackbarMessage = "";
+                firstUseFlag = true;
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -117,6 +125,9 @@ public class ListActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.d("CustomMessage","onResume();");
+        Log.d("CustomMessage", "snackbarMessage is: " + snackbarMessage);
+
 
 //        ProgressBar myProgressBar;
 //        myProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -126,20 +137,35 @@ public class ListActivity extends AppCompatActivity {
         //Get the transferred data from source activity.
 
         Intent intent = getIntent();
+        Log.d("CustomMessage", "Before Intent() - snackbarMessage is: " + snackbarMessage);
         snackbarMessage = intent.getStringExtra("snackbarMessage");
-        if (snackbarMessage != null && snackbarMessage != "") {
+        Log.d("CustomMessage", "after Intent() - snackbarMessage is: " + snackbarMessage);
+        if(snackbarMessage == null) {
+            Log.d("CustomMessage","if(snackbarMessage == null) tested true");
+            Log.d("CustomMessage","snackbarMessage set to empty");
+            snackbarMessage = "";
+
+        }
+
+
+
+        if (snackbarMessage.length() != 0) {
+            Log.d("CustomMessage", "if() - snackbarMessage is: " + snackbarMessage);
+            if(snackbarMessage.length() != 0) {
+                Log.d("CustomMessage","(snackbarMessage.length() != 0) tested true");
+            }
+
+
             //Toast.makeText(this,"snackBar: " + snackbarMessage, Toast.LENGTH_LONG).show();
 
 //            View parentLayout = (View) findViewById(android.R.id.content);
 
-            Log.d("CustomMessage", "snackbarMessage before show() is: " + snackbarMessage);
-
             View parentLayout = (View) findViewById(android.R.id.content);
             Snackbar mySnackbar = ThemedSnackbar.make(parentLayout, snackbarMessage, Snackbar.LENGTH_LONG).setDuration(4000);
+            Log.d("CustomMessage", "snackbarMessage before show() is: " + snackbarMessage);
             mySnackbar.show();
-
-
-            snackbarMessage = null;
+            snackbarMessage = "";
+            //snackbarMessage = null;
         }
 
 
